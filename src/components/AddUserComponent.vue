@@ -1,5 +1,5 @@
 <template>
-  <b-row no-gutters class="p-2 border-bottom" id="addUserContainer" ref="addUserContainer">
+  <b-row no-gutters class="p-2 border-bottom" id="addUserContainer" ref="addUserContainer" style="height: 42px;">
     <b-form-input type="search" placeholder="Search" size="sm" style="flex: 1"></b-form-input>
     <b-button id="addUser" ref="addUser" class="ml-3" variant="outline-secondary" size="sm">Add</b-button>
 
@@ -15,7 +15,7 @@
             v-for="item in onlineUsers" :key="item.id"
         >
           <b-img rounded="circle" width="45" height="45" blank-color="#777" :blank="true"></b-img>
-          <div class="font-weight-bold ml-2" style="flex: 1">{{ item.username }}</div>
+          <div class="font-weight-bold ml-2" style="flex: 1">{{ item.email }}</div>
         </b-row>
       </div>
     </b-popover>
@@ -40,7 +40,10 @@
       this.$subscribeTo(await this.messageStore.fetchOnlineUsers(), () => ({}))
 
       // click outside of the popover should close it
-      this.$subscribeTo(clickOutside$.pipe(filter(e => e.target != this.$refs.addUser && e.target !== this.$refs.addUserContent)),
+      this.$subscribeTo(
+        clickOutside$.pipe(
+          filter(e => e.target != this.$refs.addUser && e.target !== this.$refs.addUserContent)
+        ),
         () => {
           if (this.popoverShow)
             this.popoverShow = false

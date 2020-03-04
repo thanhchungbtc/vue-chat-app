@@ -1,6 +1,6 @@
 import {AuthService, MessageService} from "@/services/interfaces";
 import FirebaseAuthService from "@/services/firebase/firebaseAuthService";
-import MockMessageService from "@/services/mock/mockMessageService";
+import FirebaseMessageService from "@/services/firebase/firebaseMessageService";
 
 
 class AppContainer {
@@ -33,8 +33,11 @@ class AppContainer {
 }
 
 const container = new AppContainer()
-container.registerAuthService(new FirebaseAuthService())
-container.registerMessageService(new MockMessageService())
+const authService = new FirebaseAuthService()
+const messageService = new FirebaseMessageService(authService)
+container.registerAuthService(authService)
+// container.registerMessageService(new MockMessageService())
+container.registerMessageService(messageService)
 
 export {container}
 

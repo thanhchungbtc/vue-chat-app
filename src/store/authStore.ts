@@ -1,7 +1,7 @@
 import {Action, Module, Mutation, VuexModule} from "vuex-module-decorators";
 import {LoginPayload, User} from "@/services/interfaces";
 import {Observable, of} from "rxjs";
-import {map, mapTo} from "rxjs/operators";
+import {map, mapTo, tap} from "rxjs/operators";
 import MockAuthService from "@/services/mock/mockAuthService";
 import {container} from "@/di";
 
@@ -20,7 +20,7 @@ export class AuthStore extends VuexModule implements AuthState {
   user: User | null = null
 
   @Mutation
-  setUser(user: User) {
+  setUser(user: User | null) {
     this.user = user
   }
 
@@ -42,5 +42,19 @@ export class AuthStore extends VuexModule implements AuthState {
         return;
       })
     )
+  }
+
+  @Action
+  listen(): Observable<User | null> {
+    return this.authService.listen().pipe(
+      tap(user => {
+        this.setUser(user)
+      })
+    )
+  }
+
+  @Action
+  logout(): Observable<void> {
+    return this.authService.logout();
   }
 }

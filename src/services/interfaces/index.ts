@@ -9,7 +9,7 @@ export class Message {
 
 export class User {
   id = ''
-  username = ''
+  email = ''
   lastMessage = ''
 }
 
@@ -20,6 +20,7 @@ export class SendMessagePayload {
   text: string = '';
 
 }
+
 export class LoginPayload {
   email: string = '';
   password: string = '';
@@ -32,10 +33,15 @@ export interface MessageService {
 
   getMessagesStream(): Observable<Message[]>;
 
-  sendMessage(payload: SendMessagePayload): Observable<boolean>;
+  sendMessage(payload: SendMessagePayload): void;
 }
 
 export interface AuthService {
-  login(credentials: LoginPayload): Observable<User>;
-  register(credentials: LoginPayload): Observable<User>;
+  login(credentials: LoginPayload): Observable<User | null>;
+
+  register(credentials: LoginPayload): Observable<User | null>;
+
+  logout(): Observable<void>;
+
+  listen(): Observable<User | null>;
 }

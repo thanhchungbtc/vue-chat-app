@@ -25,7 +25,7 @@ export default class MockMessageService implements MessageService {
     for (let i = 1; i < 3; i++) {
       partners.push({
         id: `${i}`,
-        username: `User ${i}`,
+        email: `User ${i}`,
         lastMessage: 'seLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore e'
       })
     }
@@ -35,7 +35,7 @@ export default class MockMessageService implements MessageService {
     for (let i = 1; i < 10; i++) {
       onlineUsers.push({
         id: `${i}`,
-        username: `User ${i}`,
+        email: `User ${i}`,
         lastMessage: 'seLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore e'
       })
     }

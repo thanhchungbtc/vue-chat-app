@@ -88,9 +88,7 @@ export class MessageStore extends VuexModule implements MessageState {
   }
 
   @Action
-  sendMessage(text: string) {
-    const payload = new SendMessagePayload()
-    payload.text = text
+  sendMessage(payload: SendMessagePayload) {
     this.mesageService.sendMessage(payload)
   }
 

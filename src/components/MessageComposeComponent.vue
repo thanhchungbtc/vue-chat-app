@@ -18,7 +18,8 @@
   import MessageComponent from "@/components/MessageComponent.vue";
   import {MessageStore} from "@/store/messageStore";
   import {getModule} from "vuex-module-decorators";
-  import {Message, User} from "@/services/interfaces";
+  import {Message, SendMessagePayload, User} from "@/services/interfaces";
+  import {AuthStore} from "@/store/authStore";
 
   @Component({
     components: {MessageComponent}
@@ -31,10 +32,19 @@
       return getModule(MessageStore, this.$store)
     }
 
+    get authStore(): AuthStore {
+      return getModule(AuthStore, this.$store)
+    }
+
     async handleKeydown(e: KeyboardEvent) {
       if (e.key === 'Enter' && e.shiftKey) {
         e.preventDefault()
-        await this.messageStore.sendMessage(this.text)
+
+        const payload = new SendMessagePayload()
+        payload.sendTo = this.messageStore.selectedUser!
+        payload.sendFrom = this.authStore.user!
+        payload.text = this.text
+        await this.messageStore.sendMessage(payload)
         this.text = '';
         this.rows = 1;
       }

@@ -2,7 +2,7 @@
   <div class="d-flex justify-content-center align-items-center h-100 flex-column">
     <h3 class="mb-3">Login</h3>
 
-    <b-alert variant="danger" v-if="error">{{ error }}</b-alert>
+    <b-alert variant="danger" :show="!!error" >{{ error }}</b-alert>
     <b-form>
       <b-list-group class="mb-5">
         <b-list-group-item class="p-1">
@@ -53,17 +53,16 @@
 
       this.loading = true;
       (await this.authStore.login(payload)).pipe(
-  catchError((s ) => {
-    console.log(s)
-  })
+
       ).subscribe(
         () => {
           this.loading = false
         },
-        // (err) => {
-        //
-        //   this.error = err.toString()
-        // }
+        err => {
+          console.log("BTC", err.message)
+          this.error = err.message
+          this.loading = false
+        }
       );
     }
   }

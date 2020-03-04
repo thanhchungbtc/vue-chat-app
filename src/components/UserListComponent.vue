@@ -9,7 +9,7 @@
              :key="item.id" align-v="center" @click="handleSelectUser(item)">
         <b-img rounded="circle" width="45" height="45" blank-color="#777" :blank="true"></b-img>
         <div class="d-flex flex-column ml-3" style="flex: 1">
-          <span class="font-weight-bold ">{{ item.username }}</span>
+          <span class="font-weight-bold ">{{ item.email }}</span>
           <span class=" text-secondary"
                 style="max-height: 40px; overflow: hidden; text-overflow: ellipsis; word-wrap: break-word">{{ item.lastMessage }}</span>
         </div>
