@@ -51,6 +51,7 @@
       this.messageStore.selectUser(user)
       this.$subscribeTo(await this.messageStore.fetchMessages(), () => ({}))
 
+
     }
   }
 </script>

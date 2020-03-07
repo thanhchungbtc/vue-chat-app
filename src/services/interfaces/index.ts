@@ -15,25 +15,37 @@ export class User {
 
 
 export class SendMessagePayload {
-  sendFrom: User = new User();
-  sendTo: User = new User();
+  sendFrom!: User
+  sendTo!: User
   text: string = '';
-
 }
+
+export class FetchMessagePayload {
+  sendFrom!: User
+  sendTo!: User
+}
+
 
 export class LoginPayload {
   email: string = '';
   password: string = '';
 }
 
+export class AddPartnerPayload {
+  sendFrom!: User
+  sendTo!: User
+}
+
 export interface MessageService {
   getOnlineUsersStream(): Observable<User[]>;
 
-  getPartnersStream(): Observable<User[]>;
+  getPartnersStream(user: User): Observable<User[]>;
 
-  getMessagesStream(): Observable<Message[]>;
+  getMessagesStream(payload: FetchMessagePayload): Observable<Message[]>;
 
   sendMessage(payload: SendMessagePayload): void;
+
+  addPartner(payload: AddPartnerPayload): void;
 }
 
 export interface AuthService {

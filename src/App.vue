@@ -1,5 +1,6 @@
 <template>
-  <router-view/>
+
+  <router-view v-if="!loading"/>
 </template>
 
 <script lang="ts">
@@ -9,8 +10,13 @@
 
   @Component
   export default class AppComponent extends Vue {
+    loading = false
+
     async mounted() {
+      this.loading = true
+
       this.$subscribeTo(await this.authStore.listen(), (user) => {
+        this.loading = false
         if (!user) {
           if (this.$route.name !== 'Login') {
             this.$router.push({name: 'Login'})

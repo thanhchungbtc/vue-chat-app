@@ -1,10 +1,11 @@
-import {Action, Module, Mutation, VuexModule} from "vuex-module-decorators";
-import {BehaviorSubject, Observable, Subscription} from "rxjs";
+import {Action, getModule, Module, Mutation, VuexModule} from "vuex-module-decorators";
+import {BehaviorSubject, Observable, of, Subscription} from "rxjs";
 import MessageService from "@/services/mock/mockMessageService";
-import {map, tap} from "rxjs/operators";
+import {filter, map, switchMap, tap} from "rxjs/operators";
 import MockMessageService from "@/services/mock/mockMessageService";
-import {Message, SendMessagePayload, User} from "@/services/interfaces";
+import {AddPartnerPayload, FetchMessagePayload, Message, SendMessagePayload, User} from "@/services/interfaces";
 import {container} from "@/di";
+import {AuthStore} from "@/store/authStore";
 
 
 export interface MessageState {
@@ -48,7 +49,10 @@ export class MessageStore extends VuexModule implements MessageState {
 
   @Action
   fetchMessages(): Observable<void> {
-    return this.mesageService.getMessagesStream().pipe(
+    const payload = new FetchMessagePayload();
+    payload.sendFrom = this.context.rootState.auth.user
+    payload.sendTo = this.selectedUser!
+    return this.mesageService.getMessagesStream(payload).pipe(
       tap(messages => {
         this.setMessages(messages)
       }),
@@ -60,7 +64,8 @@ export class MessageStore extends VuexModule implements MessageState {
 
   @Action
   fetchPartners(): Observable<void> {
-    return this.mesageService.getPartnersStream().pipe(
+    const user = this.context.rootState.auth.user
+    return this.mesageService.getPartnersStream(user).pipe(
       tap(users => {
         this.setPartners(users)
       }),
@@ -68,6 +73,15 @@ export class MessageStore extends VuexModule implements MessageState {
         return;
       })
     )
+  }
+
+  @Action
+  addPartner(user: User) {
+    const payload = new AddPartnerPayload();
+    payload.sendFrom = this.context.rootState.auth.user
+    payload.sendTo = user
+    this.mesageService.addPartner(payload);
+    this.setSelectedUser(user)
   }
 
   @Action

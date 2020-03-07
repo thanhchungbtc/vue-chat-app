@@ -11,6 +11,7 @@
 
       <div ref="addUserContent">
         <b-row
+            @click="handleAddUser(item)"
             no-gutters align-v="center" class="p-2 border-bottom"
             v-for="item in onlineUsers" :key="item.id"
         >
@@ -60,6 +61,10 @@
       return this.messageStore.onlineUsers
     }
 
+    handleAddUser(user: User) {
+      this.messageStore.addPartner(user)
+
+    }
 
     onClose() {
       this.popoverShow = false
