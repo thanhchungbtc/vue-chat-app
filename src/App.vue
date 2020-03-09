@@ -5,12 +5,13 @@
 
 <script lang="ts">
   import {Component, Vue} from "vue-property-decorator";
-  import {AuthStore} from "@/store/authStore";
-  import {getModule} from "vuex-module-decorators";
+  import {container} from "@/di";
 
   @Component
   export default class AppComponent extends Vue {
     loading = false
+
+    authStore = container.getAuthStore()
 
     async mounted() {
       this.loading = true
@@ -29,8 +30,5 @@
       })
     }
 
-    get authStore(): AuthStore {
-      return getModule(AuthStore, this.$store)
-    }
   }
 </script>

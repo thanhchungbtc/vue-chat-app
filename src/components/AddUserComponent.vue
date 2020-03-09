@@ -13,7 +13,7 @@
         <b-row
             @click="handleAddUser(item)"
             no-gutters align-v="center" class="p-2 border-bottom"
-            v-for="item in onlineUsers" :key="item.id"
+            v-for="item in state.activeUsers" :key="item.id"
         >
           <b-img rounded="circle" width="45" height="45" blank-color="#777" :blank="true"></b-img>
           <div class="font-weight-bold ml-2" style="flex: 1">{{ item.email }}</div>
@@ -30,15 +30,20 @@
   import {User} from "@/services/interfaces";
   import {MessageStore} from "@/store/messageStore";
   import {getModule} from "vuex-module-decorators";
+  import {UserStore} from "@/mobxStore/userStore";
+  import {container} from "@/di";
+  import {Observer} from "mobx-vue";
 
   const clickOutside$ = fromEvent(document, 'click')
+  @Observer
   @Component
   export default class AddUserComponent extends Vue {
+    state = container.getUserStore()
+
     popoverShow = false
 
     async created() {
-      // subscribe onine user stream
-      this.$subscribeTo(await this.messageStore.fetchOnlineUsers(), () => ({}))
+      this.state.loadActiveUsers()
 
       // click outside of the popover should close it
       this.$subscribeTo(
@@ -53,22 +58,11 @@
     }
 
 
-    get messageStore(): MessageStore {
-      return getModule(MessageStore, this.$store)
-    }
-
-    get onlineUsers(): User[] {
-      return this.messageStore.onlineUsers
-    }
-
     handleAddUser(user: User) {
-      this.messageStore.addPartner(user)
+      // this.messageStore.addPartner(user)
 
     }
 
-    onClose() {
-      this.popoverShow = false
-    }
   }
 </script>
 

@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from "@/views/Login.vue";
 import Register from "@/views/Register.vue";
+import {container} from "@/di";
 
 Vue.use(VueRouter)
 
@@ -16,6 +17,21 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+router.beforeEach((to, from, next) => {
+  const authStore = container.getAuthStore()
+  const user = authStore.user
+
+  if (!user) {
+    if (to.name !== 'Login' && to.name !== 'Register') {
+      return next({name: 'Login'})
+    }
+  } else {
+    if (to.name === 'Login' || to.name === 'Register') {
+      return next({name: 'Home'})
+    }
+  }
+  return next()
 })
 
 export default router
