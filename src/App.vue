@@ -21,12 +21,19 @@
             this.$router.push({name: 'Home'})
           }
         }
+      },
+
+      error(err: Error) {
+        this.$bvToast.toast(err.message, {
+          title: 'Error occurred',
+          variant: 'danger',
+        })
       }
 
     },
 
     computed: {
-      ...mapGetters('auth', ['user'])
+      ...mapGetters('auth', ['user', 'error'])
     },
 
     methods: {}

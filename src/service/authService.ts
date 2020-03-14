@@ -1,6 +1,5 @@
 import {fromPromise} from "rxjs/internal-compatibility";
 import firebase from "firebase";
-import {map} from "rxjs/operators";
 import {User} from "@/models";
 import {Observable} from "rxjs";
 import {singleton} from "tsyringe";
@@ -9,56 +8,53 @@ import {singleton} from "tsyringe";
 export class AuthService {
 
   onAuthChanged(): Observable<User | null> {
-    return new Observable<User>((observer) => {
+    return new Observable<User | null>((observer) => {
       return firebase.auth().onAuthStateChanged((u) => {
         if (!u) {
-          return null
+          observer.next(null)
+        } else {
+          const user = {
+            id: u.uid,
+            email: u.email
+          } as User
+          observer.next(user)
         }
-        const user = {
-          id: u.uid,
-          email: u.email
-        } as User
-        observer.next(user)
       })
     })
   }
 
-  login(email: string, password: string) {
-    return fromPromise(firebase.auth().signInWithEmailAndPassword(email, password)).pipe(
-      map((u) => {
-        if (!u.user) {
-          return null;
+  login(email: string, password: string): Promise<User | null> {
+    return firebase.auth().signInWithEmailAndPassword(email, password)
+      .then((u) => {
+          if (!u.user) {
+            return null;
+          }
+          const user = u.user
+          return {
+            id: user.uid,
+            email: user.email,
+          } as User
         }
-        const user = u.user
-        return {
-          id: user.uid,
-          email: user.email,
-        } as User
-      })
-    )
+      )
   }
 
-  register(email: string, password: string): Observable<User | null> {
-    return fromPromise(firebase.auth().createUserWithEmailAndPassword(email, password)
+  register(email: string, password: string): Promise<User | null> {
+    return firebase.auth().createUserWithEmailAndPassword(email, password)
       .then((u) => {
-        if (!u.user) {
-          return null;
+          if (!u.user) {
+            return null;
+          }
+          const user = u.user
+          return {
+            id: user.uid,
+            email: user.email,
+          } as User
         }
-        return {
-          id: u.user.uid,
-          email: u.user.email
-        } as User
-      })
-      .then((u) => {
-        if (!u) {
-          return null
-        }
-        return firebase.firestore()
-          .collection('users')
-          .doc(u.id).set(u)
-          .then(() => u)
-      })
-    )
+      )
+  }
+
+  logout(): Promise<void> {
+    return firebase.auth().signOut()
   }
 
 }

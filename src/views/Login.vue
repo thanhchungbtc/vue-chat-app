@@ -50,8 +50,13 @@
 
 
     methods: {
-      login() {
-        this.$store.dispatch('auth/login', this.payload)
+      async login() {
+        try {
+          this.loading = true
+          await this.$store.dispatch('auth/login', this.payload)
+        } finally {
+          this.loading = false
+        }
       },
 
     }

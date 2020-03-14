@@ -4,6 +4,11 @@ Just a simple chat app that use
 - rxjs
 - vuex for state management
 
+## Features
+- Login, Register
+- One2one chat
+
+
 ## How to run
 ### Environment
 - Change `.env.example` to `.env`

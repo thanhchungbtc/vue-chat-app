@@ -56,8 +56,13 @@
 
 
     methods: {
-      register() {
-        this.$store.dispatch('auth/register', this.payload)
+      async register() {
+        try {
+          this.loading = true
+          await this.$store.dispatch('auth/register', this.payload)
+        } finally {
+          this.loading = false;
+        }
       }
     }
 

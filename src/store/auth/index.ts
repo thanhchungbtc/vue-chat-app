@@ -6,11 +6,13 @@ import {AuthService} from "@/service";
 
 export interface AuthState {
   user: User | null;
+  error: Error;
 }
 
 const initialState = (): AuthState => {
   return {
     user: null,
+    error: Error,
   }
 }
 
@@ -29,6 +31,10 @@ export default {
   mutations: {
     setUser(state, user: User) {
       state.user = user
+    },
+
+    setError(state, error: Error) {
+      state.error = error
     }
   },
 
@@ -41,18 +47,31 @@ export default {
     },
 
     async login({commit}, payload: LoginActionPayload) {
-      const user = await authService.login(payload.email, payload.password).toPromise()
-      commit('setUser', user)
+      try {
+        const user = await authService.login(payload.email, payload.password)
+        commit('setUser', user)
+      } catch (e) {
+        commit('setError', e)
+      }
     },
 
     async register({commit}, payload: LoginActionPayload) {
-      const user = await authService.register(payload.email, payload.password).toPromise()
-      commit('setUser', user)
+      try {
+        const user = await authService.register(payload.email, payload.password)
+        commit('setUser', user)
+      } catch (e) {
+        commit('setError', e)
+      }
+    },
+
+    async logout() {
+      await authService.logout()
     }
   },
 
   getters: {
     user: state => state.user,
+    error: state => state.error,
   }
 
 } as Module<AuthState, RootState>
