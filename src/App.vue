@@ -1,34 +1,35 @@
 <template>
-
-  <router-view v-if="!loading"/>
+  <router-view></router-view>
 </template>
 
 <script lang="ts">
-  import {Component, Vue} from "vue-property-decorator";
-  import {container} from "@/di";
+  import Vue from "vue";
+  import {mapGetters} from "vuex";
 
-  @Component
-  export default class AppComponent extends Vue {
-    loading = false
+  export default Vue.extend({
 
-    authStore = container.getAuthStore()
+    mounted: function () {
+      this.$store.dispatch("auth/bootstrap");
+    },
 
-    async mounted() {
-      this.loading = true
-
-      this.$subscribeTo(await this.authStore.listen(), (user) => {
-        this.loading = false
-        if (!user) {
-          if (this.$route.name !== 'Login') {
-            this.$router.push({name: 'Login'})
-          }
+    watch: {
+      user() {
+        if (this.$route.name !== 'Login') {
+          this.$router.push({name: 'Login'})
         } else {
           if (this.$route.name === 'Login' || this.$route.name === 'Register') {
             this.$router.push({name: 'Home'})
           }
         }
-      })
-    }
+      }
 
-  }
+    },
+
+    computed: {
+      ...mapGetters('auth', ['user'])
+    },
+
+    methods: {}
+  })
+
 </script>

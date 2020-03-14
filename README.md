@@ -1,34 +1,25 @@
-# vue-trello-rxjs
+# vue-chat-app
+Just a simple chat app that use
+- firebase backend
+- rxjs
+- vuex for state management
 
-## Project setup
-```
-yarn install
-```
+## How to run
+### Environment
+- Change `.env.example` to `.env`
+- Update `.env` with your firebase config
 
-### Compiles and hot-reloads for development
+### Development
 ```
 yarn serve
 ```
 
-### Compiles and minifies for production
-```
+### Production
+```shell script
 yarn build
 ```
 
-### Run your unit tests
-```
+### Unit test
+```shell script
 yarn test:unit
 ```
-
-### Run your end-to-end tests
-```
-yarn test:e2e
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

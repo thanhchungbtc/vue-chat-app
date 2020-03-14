@@ -8,3 +8,9 @@ html, body {
     height: 100vh;
     margin: 0
 }
+
+input:focus, textarea:focus {
+    outline: 0 !important;
+    -webkit-appearance: none;
+    box-shadow: none !important;
+}

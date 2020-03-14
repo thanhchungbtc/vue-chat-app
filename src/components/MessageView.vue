@@ -7,18 +7,20 @@
 </template>
 
 <script lang="ts">
-  import {Component, Prop, Vue} from "vue-property-decorator";
+  import {PropType} from 'vue'
 
   interface Message {
     outgoing: boolean;
     text: string;
   }
 
-  @Component
-  export default class MessageComponent extends Vue {
-    @Prop() message!: Message;
-
+  export default {
+    props: {
+      message: Object as PropType<Message>
+    }
   }
+
+
 </script>
 
 <style scoped>

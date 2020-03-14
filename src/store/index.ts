@@ -1,19 +1,18 @@
 import Vue from 'vue'
-import Vuex, {Store} from 'vuex'
-import {MessageState, MessageStore} from "@/store/messageStore";
-import {AuthState, AuthStore} from "@/store/authStore";
+import Vuex from 'vuex'
+import auth, {AuthState} from './auth'
+import chat, {ChatState} from "./chat";
 
 Vue.use(Vuex)
 
-interface RootState {
-  message: MessageState;
+export interface RootState {
   auth: AuthState;
-
+  chat: ChatState;
 }
 
-export default new Vuex.Store({
+export default new Vuex.Store<RootState>({
   modules: {
-    message: MessageStore,
-    auth: AuthStore,
-  },
+    auth,
+    chat,
+  }
 })

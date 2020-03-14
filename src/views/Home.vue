@@ -1,37 +1,17 @@
 <template>
   <div class="d-flex" style="height: 100%;">
-
-    <UserListComponent></UserListComponent>
-    <MessageListComponent></MessageListComponent>
-
+    <UserListView></UserListView>
+    <MessageListView></MessageListView>
   </div>
 </template>
 
 <script lang="ts">
-  import {Component, Vue} from "vue-property-decorator";
-  import MessageComponent from "@/components/MessageComponent.vue";
-  import {MessageStore} from "@/store/messageStore";
-  import {getModule} from "vuex-module-decorators";
-  import {Observable} from "rxjs";
-  import {fromPromise} from "rxjs/internal-compatibility";
-  import {Message, User} from "@/services/interfaces";
-  import UserListComponent from "@/components/UserListComponent.vue";
-  import MessageListComponent from "@/components/MessageListComponent.vue";
+  import Vue from 'vue'
+  import UserListView from "@/components/UserListView.vue";
+  import MessageListView from "@/components/MessageListView.vue";
 
-  @Component({
-    components: {MessageListComponent, UserListComponent, MessageComponent}
+  export default Vue.extend({
+    components: {MessageListView, UserListView}
   })
-  export default class HomeComponent extends Vue {
-
-
-  }
 </script>
 
-<style>
-
-  input:focus, textarea:focus {
-    outline: 0 !important;
-    -webkit-appearance: none;
-    box-shadow: none !important;
-  }
-</style>
